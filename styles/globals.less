@@ -63,6 +63,12 @@ a {
     color: @primary-color;
   }
 }
+.error {
+  h1 {
+    font-family: @font-bold;
+    font-size: 36px;
+  }
+}
 
 .wrap {
   max-width: 1040px;
@@ -76,7 +82,7 @@ a {
 #client__layout {
   .ant-layout-header {
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     width: 100%;
     padding: 0;
     background: #ffffff;
@@ -126,11 +132,11 @@ a {
     border: none;
   }
   .name {
-    .ant-select-selector {
-      border-bottom-left-radius: 100px;
-      border-top-left-radius: 100px;
-      padding-left: 25px !important;
-    }
+    border: none;
+    height: 100%;
+    border-bottom-left-radius: 100px;
+    border-top-left-radius: 100px;
+    padding-left: 25px !important;
     width: 100%;
     border-right: 1px solid #e5e5e5;
   }
@@ -149,6 +155,20 @@ a {
     }
     width: 100%;
   }
+}
+
+.load__more {
+  color: #fff;
+  font-size: 20px;
+  background: #1D1C1C;
+  height: 42px;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.07);
+  border-radius: 25px;
+  min-width: 217px;
+  position: absolute;
+  left: 50%;
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 .product__card {
@@ -176,7 +196,7 @@ a {
     margin-right: auto;
     position: relative;
     .product__content {
-      max-width: 150px;
+      max-width: 180px;
       margin: auto;
       text-align: center;
       h2 {
@@ -221,26 +241,25 @@ a {
   .search__box {
     box-shadow: none;
     .name {
-      .ant-select-selector {
-        border-radius: 100px;
-        padding-left: 0 11px !important;
-      }
+      border-radius: 100px;
       border-right: none;
-      margin-bottom: 15px;
     }
     .type {
+      margin-top: 15px;
       .ant-select-selector {
         border-radius: 100px;
       }
       border-right: none;
     }
     .rarity {
+      margin-top: 15px;
       .ant-select-selector {
         border-radius: 100px;
       }
       border-right: none;
     }
     .set {
+      margin-top: 15px;
       .ant-select-selector {
         border-radius: 100px;
       }

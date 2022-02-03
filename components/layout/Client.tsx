@@ -7,8 +7,9 @@ import {
 } from "@ant-design/icons";
 import config from "../../customize/config";
 import Head from "next/head";
+import Router from "next/router";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 const { SubMenu } = Menu;
 
 const ClientLayout: FC<ReactNode> = ({ children }) => {
@@ -16,7 +17,7 @@ const ClientLayout: FC<ReactNode> = ({ children }) => {
     <Layout id="client__layout">
       <MetaTag />
       <Header>
-        <div className="main__header">
+        <div className="main__header" onClick={() => Router.push("/")}>
           <Row justify="center" align="middle">
             <h1>TCG Marketplace</h1>
           </Row>

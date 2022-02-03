@@ -1,31 +1,71 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import { Button, Col, Row, Select, SelectProps, Spin } from "antd";
+import {
+  Avatar,
+  Button,
+  Col,
+  Input,
+  List,
+  Row,
+  Select,
+  SelectProps,
+  Skeleton,
+  Spin,
+} from "antd";
 
-import type { GetStaticProps, InferGetStaticPropsType } from "next";
+import type {
+  GetServerSideProps,
+  GetStaticProps,
+  InferGetServerSidePropsType,
+  InferGetStaticPropsType,
+} from "next";
 import debounce from "lodash/debounce";
 
-// create later from api
-interface Product {}
+import { PokemonTCG } from "pokemon-tcg-sdk-typescript";
+import Router from "next/router";
 
-// Usage of DebounceSelect
-interface UserValue {
-  label: string;
-  value: string;
+interface PokemonCard extends PokemonTCG.Card {
+  cardmarket?: any;
 }
 
-const Home = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const products = [
-    { name: "one" },
-    { name: "two" },
-    { name: "three" },
-    { name: "four" },
-    { name: "five" },
-    { name: "six" },
-    { name: "seven" },
-  ];
+const Home = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
+  const splitTypes = props.query?.q?.split(" ") || [];
+  const rawParams = splitTypes.map((type: string) =>
+    type.replaceAll("*", " ").split(":")
+  );
 
-  const [value, setValue] = React.useState<UserValue[]>([]);
+  const [params, setParams] = useState(Object.fromEntries(rawParams));
+
+  if (props.notFound) {
+    return (
+      <div className="error wrap">
+        <h1>Couldn't find any cards matching your search criteria!</h1>
+      </div>
+    );
+  }
+
+  const typeOptions = props.types.map((type: PokemonTCG.Type) => ({
+    label: type,
+    value: type.replaceAll(" ", "*"),
+  }));
+  const rarityOptions = props.rarities.map((rarity: PokemonTCG.Rarity) => ({
+    label: rarity,
+    value: rarity.replaceAll(" ", "*"),
+  }));
+  const setOptions = props.sets.map((set: PokemonTCG.Set) => ({
+    label: set.name,
+    value: set.id.replaceAll(" ", "*"),
+  }));
+
+  const handleParams = (param: any) => (value: any) => {
+    if (param == "name") {
+      setParams({ ...params, [param]: `${value.target.value}*` });
+    } else {
+      setParams({ ...params, [param]: value });
+    }
+  };
 
   return (
     <div>
@@ -36,84 +76,154 @@ const Home = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
       </Head>
 
       <section className="search__box">
-        {/* <DebounceSelect
-          mode="multiple"
-          value={value}
-          placeholder="Name.."
-          fetchOptions={fetchUserList}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
-          style={{ width: 170 }}
-        /> */}
         <Row gutter={{ xs: 15, sm: 15, md: 0 }}>
           <Col xs={24} sm={24} md={9}>
-            <Select
+            <Input
               className="name"
-              showSearch
               placeholder="Name.."
-              onChange={() => {}}
+              onChange={debounce(handleParams("name"), 1000)}
               size="large"
-              options={[]}
-            ></Select>
+              defaultValue={params.name}
+            />
           </Col>
           <Col xs={8} sm={8} md={5}>
             <Select
               className="type"
               placeholder="Type"
-              onChange={() => {}}
+              onChange={handleParams("types")}
               size="large"
-              options={[]}
+              defaultValue={params.types}
+              options={typeOptions}
+              allowClear
             ></Select>
           </Col>
           <Col xs={8} sm={8} md={5}>
             <Select
               className="rarity"
               placeholder="Rarity"
-              onChange={() => {}}
+              onChange={handleParams("rarity")}
               size="large"
-              options={[]}
+              defaultValue={params.rarity}
+              options={rarityOptions}
+              allowClear
             ></Select>
           </Col>
           <Col xs={8} sm={8} md={5}>
             <Select
               className="set"
               placeholder="Set"
-              onChange={() => {}}
+              onChange={handleParams("set.id")}
               size="large"
-              showSearch
-              options={[{ label: "Lucid", value: "lucid" }]}
+              defaultValue={params["set.id"]}
+              options={setOptions}
+              allowClear
             ></Select>
           </Col>
         </Row>
       </section>
 
       <section className="wrap">
-        <Row gutter={73}>
-          {products.map((product: any, key: any) => (
+        <LoadMoreList cards={props.cards} params={params} />
+        {/* <Row gutter={73}>
+          {props.cards.map((card: PokemonCard, key: any) => (
             <Col xs={24} sm={12} md={12} lg={8} key={`poki-product-${key}`}>
-              <ProductCard product={product} />
+              <PokemonCard card={card} />
             </Col>
           ))}
-        </Row>
+        </Row> */}
       </section>
     </div>
   );
 };
 
-// set proper type later
-const ProductCard = ({ product }: any) => {
-  console.log({ product });
+const LoadMoreList = (props: { cards: PokemonCard[]; params: any }) => {
+  const [initLoading, setInitLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [cards, setCards] = useState<PokemonCard[]>(props.cards);
+  const [pageSize, setPageSize] = useState(12);
+
+  useEffect(() => {
+    const entries = Object.entries(props.params);
+    const q = entries
+      .filter(([, value]) => value)
+      .map(([key, value]) => `${key}:${value}`)
+      .join(" ");
+    (async () => {
+      const params: PokemonTCG.Parameter = {
+        q: (q as string) || "",
+        pageSize,
+      };
+      const pokemonCards: PokemonCard[] = await PokemonTCG.findCardsByQueries(
+        params
+      );
+
+      setCards(pokemonCards);
+    })();
+    if (q) {
+      Router.push(`/?q=${q}`, undefined, { shallow: true });
+    }
+    setLoading(false);
+    setInitLoading(false);
+  }, [props.params, pageSize]);
+
+  const onLoadMore = () => {
+    setLoading(true);
+    setPageSize(pageSize + 12);
+  };
+
+  const loadMore =
+    !initLoading && !loading ? (
+      <div
+        style={{
+          textAlign: "center",
+          marginTop: 12,
+          height: 32,
+          lineHeight: "32px",
+        }}
+      >
+        <Button className="load__more" onClick={onLoadMore}>
+          Load More
+        </Button>
+      </div>
+    ) : null;
+
+  return (
+    <List
+      className="demo-loadmore-list"
+      loading={initLoading}
+      itemLayout="horizontal"
+      loadMore={loadMore}
+      dataSource={cards}
+      grid={{ gutter: 73, xs: 1, sm: 2, md: 2, lg: 3 }}
+      renderItem={(card) => (
+        <List.Item>
+          <PokemonCard card={card} />
+        </List.Item>
+      )}
+    />
+  );
+};
+
+const PokemonCard = ({ card }: { card: PokemonCard }) => {
+  const currency = "$";
+  const price =
+    (card?.cardmarket &&
+      `${currency} ${
+        card?.cardmarket?.prices?.averageSellPrice ||
+        card?.cardmarket?.prices?.trendPrice
+      }`) ||
+    "Nego";
+
   return (
     <div className="product__card">
-      <img src="/img/test-img.png" />
+      <img src={card?.images?.small} />
       <div className="product__mask">
         <div className="product__content">
-          <h2>Pokemon</h2>
-          <p>rarity</p>
+          <h2>{card?.name}</h2>
+          <p>{card?.rarity}</p>
           <div className="price__item">
-            <div>$2.49</div>
-            <div>3 left</div>
+            <div>{price}</div>
+            <div>{card?.set?.total} left</div>
           </div>
         </div>
         <Button>Select card</Button>
@@ -122,84 +232,27 @@ const ProductCard = ({ product }: any) => {
   );
 };
 
-async function fetchUserList(username: string): Promise<UserValue[]> {
-  console.log("fetching user", username);
-
-  return fetch("https://randomuser.me/api/?results=5")
-    .then((response) => response.json())
-    .then((body) =>
-      body.results.map(
-        (user: {
-          name: { first: string; last: string };
-          login: { username: string };
-        }) => ({
-          label: `${user.name.first} ${user.name.last}`,
-          value: user.login.username,
-        })
-      )
-    );
-}
-
-export interface DebounceSelectProps<ValueType = any>
-  extends Omit<SelectProps<ValueType>, "options" | "children"> {
-  fetchOptions: (search: string) => Promise<ValueType[]>;
-  debounceTimeout?: number;
-}
-
-function DebounceSelect<
-  ValueType extends {
-    key?: string;
-    label: React.ReactNode;
-    value: string | number;
-  } = any
->({ fetchOptions, debounceTimeout = 800, ...props }: DebounceSelectProps) {
-  const [fetching, setFetching] = React.useState(false);
-  const [options, setOptions] = React.useState<ValueType[]>([]);
-  const fetchRef = React.useRef(0);
-
-  const debounceFetcher = React.useMemo(() => {
-    const loadOptions = (value: string) => {
-      fetchRef.current += 1;
-      const fetchId = fetchRef.current;
-      setOptions([]);
-      setFetching(true);
-
-      fetchOptions(value).then((newOptions) => {
-        if (fetchId !== fetchRef.current) {
-          // for fetch callback order
-          return;
-        }
-
-        setOptions(newOptions);
-        setFetching(false);
-      });
-    };
-
-    return debounce(loadOptions, debounceTimeout);
-  }, [fetchOptions, debounceTimeout]);
-
-  return (
-    <Select<ValueType>
-      labelInValue
-      filterOption={false}
-      onSearch={debounceFetcher}
-      notFoundContent={fetching ? <Spin size="small" /> : null}
-      {...props}
-      options={options}
-    />
-  );
-}
-
 export default Home;
 
-export const getStaticProps: GetStaticProps = async () => {
-  // const res = await fetch("http://localhost:3000/api/product");
-  // const people = await res.json();
-  // if (!people) {
-  //   return {
-  //     notFound: true,
-  //   };
-  // }
-  const people: any = [];
-  return { props: { people } };
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { query } = context;
+  const { size, q } = query;
+
+  const params: PokemonTCG.Parameter = {
+    q: (q as string) || "",
+    pageSize: parseInt(size as string) || 12,
+  };
+  try {
+    const cards: PokemonCard[] =
+      (await PokemonTCG.findCardsByQueries(params)) || [];
+
+    const types: PokemonTCG.Type[] = await PokemonTCG.getTypes();
+    const rarities: PokemonTCG.Rarity[] = await PokemonTCG.getRarities();
+    const sets: PokemonTCG.Set[] = await PokemonTCG.getAllSets();
+
+    return { props: { query, cards, types, rarities, sets } };
+  } catch (error) {
+    console.log({ error });
+    return { props: { notFound: true } };
+  }
 };
