@@ -22,6 +22,7 @@ body {
   font-size: 14px;
   font-family: @font-primary;
   font-weight: 400;
+  background: #f8f8f8;
 }
 
 h1,
@@ -54,12 +55,22 @@ h2 {
 h1 {
   font-size: 60px;
 }
+
 a {
   color: @black;
   text-decoration: none;
   &:hover {
     color: @primary-color;
   }
+}
+
+.wrap {
+  max-width: 1040px;
+  margin: auto;
+}
+
+.ant-layout {
+  background: #f8f8f8;
 }
 
 #client__layout {
@@ -79,17 +90,161 @@ a {
         margin-bottom: 0;
         margin-top: 18px;
       }
-      .logo{
-        background-image: url('/img/logo.png');
+      .logo {
+        background-image: url("/img/logo.png");
         width: 68px;
         height: 42px;
-        &::after{
-          // content: "hello"
+        position: relative;
+        margin-top: -5px;
+        &::after {
+          content: "";
+          background: #fff;
+          z-index: -1;
+          position: absolute;
+          width: 50px;
+          height: 50px;
+          left: 9px;
+          border-radius: 50%;
+          box-shadow: 0px 4px 10px rgb(0 0 0 / 3%);
         }
       }
     }
   }
-  .ant-layout-content{
+  .ant-layout-content {
     margin-top: 150px !important;
+  }
+}
+
+.search__box {
+  margin-bottom: 50px;
+  max-width: 475px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03);
+  // background: #fff;
+  .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border: none;
+  }
+  .name {
+    .ant-select-selector {
+      border-bottom-left-radius: 100px;
+      border-top-left-radius: 100px;
+      padding-left: 25px !important;
+    }
+    width: 100%;
+    border-right: 1px solid #e5e5e5;
+  }
+  .type {
+    width: 100%;
+    border-right: 1px solid #e5e5e5;
+  }
+  .rarity {
+    width: 100%;
+    border-right: 1px solid #e5e5e5;
+  }
+  .set {
+    .ant-select-selector {
+      border-bottom-right-radius: 100px;
+      border-top-right-radius: 100px;
+    }
+    width: 100%;
+  }
+}
+
+.product__card {
+  min-width: 294px;
+  min-height: 432px;
+  margin-bottom: 80px;
+  img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    min-width: 194px;
+    position: relative;
+    z-index: 1;
+  }
+  .product__mask {
+    background: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03);
+    border-radius: 20px;
+    padding-bottom: 25px;
+    padding-top: 70px;
+    margin-top: -60px;
+    width: 294px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    .product__content {
+      max-width: 150px;
+      margin: auto;
+      text-align: center;
+      h2 {
+        font-family: @font-bold;
+        font-size: 25px;
+        line-height: 37px;
+        color: #1d1c1c;
+        margin-bottom: 0;
+      }
+      p {
+        margin-bottom: 5px;
+        color: #0f6db0;
+        font-size: 16px;
+      }
+      .price__item {
+        display: flex;
+        justify-content: space-around;
+        div {
+          margin-bottom: 10px;
+          color: #6a6969;
+          font-size: 20px;
+        }
+      }
+    }
+    .ant-btn {
+      color: #1d1c1c;
+      font-size: 20px;
+      background: #fdce29;
+      height: 42px;
+      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.07);
+      border-radius: 25px;
+      min-width: 217px;
+      position: absolute;
+      left: 50%;
+      -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .search__box {
+    box-shadow: none;
+    .name {
+      .ant-select-selector {
+        border-radius: 100px;
+        padding-left: 0 11px !important;
+      }
+      border-right: none;
+      margin-bottom: 15px;
+    }
+    .type {
+      .ant-select-selector {
+        border-radius: 100px;
+      }
+      border-right: none;
+    }
+    .rarity {
+      .ant-select-selector {
+        border-radius: 100px;
+      }
+      border-right: none;
+    }
+    .set {
+      .ant-select-selector {
+        border-radius: 100px;
+      }
+      border-right: none;
+    }
   }
 }

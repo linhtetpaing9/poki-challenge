@@ -24,22 +24,16 @@ const ClientLayout: FC<ReactNode> = ({ children }) => {
             <div className="logo"/>
           </Row>
         </div>
-        {/* <div className="logo" /> */}
       </Header>
       <Content
         className="site-layout"
-        style={{ padding: "0 50px", marginTop: 64 }}
       >
         <div
           className="site-layout-background"
-          style={{ padding: 24, minHeight: 380 }}
         >
           {children}
         </div>
       </Content>
-      <Footer style={{ textAlign: "center" }}>
-        Ant Design ©2018 Created by Ant UED
-      </Footer>
     </Layout>
   );
 };
@@ -109,7 +103,6 @@ const MetaTag = ({ title }: { title?: string }) => {
           href={`${config.domain}/img/favicon_io/favicon-16x16.png`}
         />
         {/* <link rel="manifest" href={`${config.domain}/img/favicon_io/site.webmanifest`} /> */}
-        {/* https://megatags.co/ */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charSet="utf-8" />
         {/* Search Engine */}
@@ -144,8 +137,6 @@ const MetaTag = ({ title }: { title?: string }) => {
         {/* facebook pixel code */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        {/* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" />
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.css" /> */}
       </>
     </Head>
   );
