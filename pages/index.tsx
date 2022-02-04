@@ -9,7 +9,6 @@ import SearchForm from "../components/SearchForm";
 import LoadMoreList from "../components/LoadMoreList";
 
 import Head from "next/head";
-import { replaceStarWithSpace } from "../utilis/helpers";
 
 // mockup only
 export const MarketplaceContext = createContext<Marketplace>({ cards: [] });
