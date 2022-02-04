@@ -16,13 +16,13 @@ export const MarketplaceContext = createContext<Marketplace>({ cards: [] });
 const Home = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
-  // const getInitialParams = (query: any) => {
-  //   const splitTypes = query?.q?.split(" ") || [""];
-  //   const rawParams = splitTypes.map((type: string) =>
-  //     type?.replaceAll("*", " ").split(":")
-  //   );
-  //   return Object.fromEntries(rawParams);
-  // };
+  const getInitialParams = (query: any) => {
+    const splitTypes = query?.q?.split(" ") || [""];
+    const rawParams = splitTypes.map((type: string) =>
+      type?.replaceAll("*", " ").split(":")
+    );
+    return Object.fromEntries(rawParams);
+  };
 
   const [params, setParams] = useState(props.query);
   const [order, setOrder] = useState({ products: [] });
