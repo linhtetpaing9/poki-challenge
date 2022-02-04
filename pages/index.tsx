@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 import { PokemonTCG } from "pokemon-tcg-sdk-typescript";
@@ -25,7 +25,17 @@ const Home = (
   };
 
   const [params, setParams] = useState(getInitialParams(props.query));
-  const [cart, setCart] = useState([])
+  const [order, setOrder] = useState({ products: [] })
+
+  useEffect(() => {
+    const products = JSON.parse(localStorage.getItem("products") as string);
+    setOrder({ products })
+  }, [])
+
+  useEffect(() => {
+    // storage in localStorage
+    localStorage.setItem("products", JSON.stringify(order.products))
+  }, [order])
 
   if (props.notFound) {
     return (
@@ -44,6 +54,8 @@ const Home = (
         types: props.types,
         rarities: props.rarities,
         sets: props.sets,
+        order,
+        setOrder
       }}
     >
       <Head>

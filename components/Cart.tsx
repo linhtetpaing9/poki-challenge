@@ -1,32 +1,38 @@
 import { Button, Col, List, Modal, Row } from "antd";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { CartCard } from "./MainCard";
+import { OrderCard } from "./MainCard";
+import { Marketplace, OrderProduct } from "../utilis/api/types";
+import { MarketplaceContext } from "../pages";
 
 const Cart = () => {
+  const { order, setOrder } = useContext<Marketplace>(MarketplaceContext);
   const [visible, setVisible] = useState(false);
-  const showModal = () => {
-    setVisible(true);
+  const [checkoutVisible, setCheckoutVisible] = useState(false);
+
+  const clearOrder = () => {
+    setOrder({ products: [] });
   };
 
-  const [confirmLoading, setConfirmLoading] = React.useState(false);
-  const [modalText, setModalText] = React.useState("Content of the modal");
-  const [initLoading, setInitLoading] = useState(true);
-  const [loading, setLoading] = useState(false);
-
-  const handleCart = () => {
-    setModalText("The modal will be closed after two seconds");
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setVisible(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
-  const handleCancel = () => {
-    console.log("Clicked cancel button");
+  const handleCheckout = () => {
+    // extends payment process, need create payment
     setVisible(false);
-  };
+    setCheckoutVisible(true);
+  }
+
+  const totalCards = order?.products?.length || 0;
+  const totalPrice = order?.products.reduce(
+    (acc: number, product: OrderProduct) => {
+      const price =
+        product?.cardmarket?.prices?.averageSellPrice ||
+        product?.cardmarket?.prices?.trendPrice ||
+        10000;
+      const quantity = product?.quantity || 0;
+      return (acc + price * quantity);
+    },
+    0
+  );
+
   return (
     <section id="cart">
       <Button
@@ -41,41 +47,50 @@ const Cart = () => {
         visible={visible}
         width={420}
         centered
-        onOk={handleCart}
         wrapClassName={"cart__modal"}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
+        onCancel={() => setVisible(false)}
+        closeIcon={<img src="/img/Close.png" />}
         footer={false}
       >
         <div className="cart__cards">
           <List
-            loading={initLoading}
             itemLayout="horizontal"
-            // loadMore={loadMore}
-            dataSource={[]}
-            grid={{ gutter: 73, xs: 1, sm: 2, md: 2, lg: 3 }}
-            renderItem={(card) => (
+            dataSource={order.products}
+            grid={{ column: 1 }}
+            renderItem={(card: OrderProduct) => (
               <List.Item>
-                <CartCard card={card} />
+                <OrderCard card={card} />
               </List.Item>
             )}
           />
         </div>
-        <div className="total__price">
-          <Row>
-            <Col>
-              <h3>Total cards</h3>
-            </Col>
-            <Col>7</Col>
-          </Row>
-          <Row>
-            <Col>
-              <h3>Total price</h3>
-            </Col>
-            <Col>$19.97</Col>
-          </Row>
-          <Button>Pay now</Button>
+        {/* <div className="bg__space"></div> */}
+        <div className="clear__all" onClick={clearOrder}>
+          Clear all
         </div>
+        <div className="total__price">
+          <div className="layout">
+            <h4>Total cards</h4>
+            <p>{totalCards}</p>
+          </div>
+          <div className="layout">
+            <h3>Total price</h3>
+            <p className="lg">{totalPrice.toFixed(2)}</p>
+          </div>
+          <Button onClick={handleCheckout}>Pay now</Button>
+        </div>
+      </Modal>
+      <Modal
+        title={false}
+        visible={checkoutVisible}
+        width={400}
+        centered
+        wrapClassName={"payment__modal"}
+        onCancel={() => setCheckoutVisible(false)}
+        closeIcon={<img src="/img/Close.png" />}
+        footer={false}
+      >
+        <img className="payment__success" src="/img/message.png"/>
       </Modal>
     </section>
   );

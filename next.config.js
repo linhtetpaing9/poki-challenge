@@ -10,4 +10,7 @@ module.exports = withLess({
       },
     },
   },
+  images: {
+    domains: ["images.pokemontcg.io"],
+  },
 });
