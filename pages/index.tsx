@@ -9,6 +9,7 @@ import SearchForm from "../components/SearchForm";
 import LoadMoreList from "../components/LoadMoreList";
 
 import Head from "next/head";
+import { replaceStarWithSpace } from "../utilis/helpers";
 
 // mockup only
 export const MarketplaceContext = createContext<Marketplace>({ cards: [] });
@@ -17,9 +18,9 @@ const Home = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const getInitialParams = (query: any) => {
-    const splitTypes = query?.q?.split(" ") || [""];
+    const splitTypes = query?.q?.split(" ") || [];
     const rawParams = splitTypes.map((type: string) =>
-      type?.split(":")
+      type?.replace(/\*/g, " ").split(":")
     );
     return Object.fromEntries(rawParams);
   };
