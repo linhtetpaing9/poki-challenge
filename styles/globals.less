@@ -79,6 +79,23 @@ a {
   background: #f8f8f8;
 }
 
+.cart {
+  position: fixed;
+  z-index: 999;
+  bottom: 70px;
+  right: 50%;
+  transform: translateX(50%);
+  line-height: 0;
+  background-color: #298bfd;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  // transition: all 0.3s ease-out;
+  color: #fff;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 42px;
+}
+
 #client__layout {
   .ant-layout-header {
     position: fixed;
@@ -160,10 +177,10 @@ a {
 .load__more {
   color: #fff;
   font-size: 20px;
-  background: #1D1C1C;
+  background: #1d1c1c;
   height: 42px;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.07);
-  border-radius: 25px;
+  // border-radius: 25px;
   min-width: 217px;
   position: absolute;
   left: 50%;
@@ -233,6 +250,21 @@ a {
       left: 50%;
       -ms-transform: translateX(-50%);
       transform: translateX(-50%);
+    }
+  }
+}
+
+#cart {
+}
+.ant-modal-mask {
+  background-color: transparent;
+}
+.cart__modal {
+  .ant-modal-content {
+    background: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.03);
+    border-radius: 20px;
+    .ant-modal-body {
     }
   }
 }

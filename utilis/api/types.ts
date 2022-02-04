@@ -1,40 +1,18 @@
-export interface Modal {
-  created?: string;
-  updated?: string;
-  isDeleted?: boolean;
-}
-export interface Product extends Modal {
-  id: string;
-  name: string;
-  description: string;
-  options: [
-    {
-      type: string;
-      price: number;
-      currency: string;
-    }
-  ];
-  categories: [
-    {
-      name: string;
-      parent: string;
-      description: string;
-      image: string;
-    }
-  ];
-  image: string;
+import { PokemonTCG } from "pokemon-tcg-sdk-typescript";
+
+export interface PokemonCard extends PokemonTCG.Card {
+  cardmarket?: any;
 }
 
-export interface Page extends Modal {
-  id: string;
-  name: string;
-  tags: string[];
-  isLayout: boolean;
-  sections: [
-    {
-      name: string;
-      order: number;
-      [field: string]: any;
-    }
-  ];
+export interface Marketplace {
+  types?: any;
+  params?: any;
+  setParams?: any;
+  cards: PokemonCard[];
+  rarities?: any;
+  sets?: any;
+}
+
+export interface Cart {
+  products?: PokemonCard[];
 }
