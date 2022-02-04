@@ -19,7 +19,7 @@ const Home = (
   const getInitialParams = (query: any) => {
     const splitTypes = query?.q?.split(" ") || [""];
     const rawParams = splitTypes.map((type: string) =>
-      type?.replaceAll("*", " ").split(":")
+      type?.split(":")
     );
     return Object.fromEntries(rawParams);
   };
