@@ -12,18 +12,21 @@ const SearchForm = () => {
     console.log({types})
     console.log({rarities})
     console.log({sets})
-  // const typeOptions = types.map((type: PokemonTCG.Type) => ({
-  //   label: type,
-  //   value: type?.replaceAll(" ", "*"),
-  // }));
-  // const rarityOptions = rarities.map((rarity: PokemonTCG.Rarity) => ({
-  //   label: rarity,
-  //   value: rarity?.replaceAll(" ", "*"),
-  // }));
-  // const setOptions = sets.map((set: PokemonTCG.Set) => ({
-  //   label: set.name,
-  //   value: set.id?.replaceAll(" ", "*"),
-  // }));
+  const typeOptions = types.map((type: PokemonTCG.Type) => ({
+    label: type,
+    value: type?.replaceAll(" ", "*") || "",
+  }));
+  const rarityOptions = rarities.map((rarity: PokemonTCG.Rarity) => ({
+    label: rarity,
+    value: rarity?.replaceAll(" ", "*") || "",
+  }));
+  const setOptions = sets.map((set: PokemonTCG.Set) => ({
+    label: set.name,
+    value: set.id?.replaceAll(" ", "*") || "",
+  }));
+      console.log({ typeOptions });
+      console.log({ rarityOptions });
+      console.log({ setOptions });
 
   const handleParams = (param: any) => (value: any) => {
     if (param == "name") {
@@ -51,7 +54,7 @@ const SearchForm = () => {
             onChange={handleParams("types")}
             size="large"
             defaultValue={params.types}
-            options={[]}
+            options={typeOptions}
             allowClear
           ></Select>
         </Col>
@@ -62,7 +65,7 @@ const SearchForm = () => {
             onChange={handleParams("rarity")}
             size="large"
             defaultValue={params.rarity}
-            options={[]}
+            options={rarityOptions}
             allowClear
           ></Select>
         </Col>
@@ -73,7 +76,7 @@ const SearchForm = () => {
             onChange={handleParams("set.id")}
             size="large"
             defaultValue={params["set.id"]}
-            options={[]}
+            options={setOptions}
             allowClear
           ></Select>
         </Col>

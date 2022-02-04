@@ -24,7 +24,7 @@ const Home = (
     return Object.fromEntries(rawParams);
   };
 
-  const [params, setParams] = useState(props.query);
+  const [params, setParams] = useState(getInitialParams(props.query));
   const [order, setOrder] = useState({ products: [] });
 
   useEffect(() => {
