@@ -13,4 +13,5 @@ module.exports = withLess({
   images: {
     domains: ["images.pokemontcg.io"],
   },
+  env: { POKEMONTCG_API_KEY: process.env.POKEMONTCG_API_KEY },
 });
