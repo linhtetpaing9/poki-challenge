@@ -28,7 +28,7 @@ const Home = (
   const [order, setOrder] = useState({ products: [] })
 
   useEffect(() => {
-    const products = JSON.parse(localStorage.getItem("products") as string);
+    const products = JSON.parse(localStorage.getItem("products") as string) || [];
     setOrder({ products })
   }, [])
 
