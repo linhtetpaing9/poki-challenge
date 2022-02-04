@@ -11,15 +11,15 @@ const SearchForm = () => {
 
   const typeOptions = types.map((type: PokemonTCG.Type) => ({
     label: type,
-    value: type.replaceAll(" ", "*"),
+    value: type,
   }));
   const rarityOptions = rarities.map((rarity: PokemonTCG.Rarity) => ({
     label: rarity,
-    value: rarity.replaceAll(" ", "*"),
+    value: rarity,
   }));
   const setOptions = sets.map((set: PokemonTCG.Set) => ({
     label: set.name,
-    value: set.id.replaceAll(" ", "*"),
+    value: set.id,
   }));
 
   const handleParams = (param: any) => (value: any) => {

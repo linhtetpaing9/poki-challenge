@@ -24,6 +24,8 @@ const Home = (
     return Object.fromEntries(rawParams);
   };
 
+  console.log(getInitialParams(props.query));
+  
   const [params, setParams] = useState(getInitialParams(props.query));
   const [order, setOrder] = useState({ products: [] });
 
@@ -87,11 +89,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     pageSize: parseInt(size as string) || 12,
   };
   try {
-    const cards: PokemonCard[] = [];
+    const cards: PokemonCard[] =
+      (await PokemonTCG.findCardsByQueries(params)) || [];
 
-    const types: PokemonTCG.Type[] = [];
-    const rarities: PokemonTCG.Rarity[] = [];
-    const sets: PokemonTCG.Set[] = [];
+    const types: PokemonTCG.Type[] = await PokemonTCG.getTypes();
+    const rarities: PokemonTCG.Rarity[] = await PokemonTCG.getRarities();
+    const sets: PokemonTCG.Set[] = await PokemonTCG.getAllSets();
 
     return { props: { query, cards, types, rarities, sets } };
   } catch (error) {
