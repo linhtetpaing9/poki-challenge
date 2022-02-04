@@ -20,7 +20,7 @@ const LoadMoreList = () => {
     const entries = Object.entries(params);
     const q = entries
       .filter(([, value]) => value)
-      .map(([key, value]: any) => `${key}:${value.replaceAll(" ", "*")}`)
+      .map(([key, value]: any) => `${key}:${value?.replaceAll(" ", "*")}`)
       .join(" ");
     if (q) {
       Router.push(`/?q=${q}`, undefined, { shallow: true });
