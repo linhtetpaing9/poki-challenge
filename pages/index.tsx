@@ -17,7 +17,7 @@ const Home = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const getInitialParams = (query: any) => {
-    const splitTypes = query?.q?.split(" ") || [];
+    const splitTypes = query?.q?.split(" ") || [""];
     const rawParams = splitTypes.map((type: string) =>
       type?.replaceAll("*", " ").split(":")
     );
@@ -25,17 +25,18 @@ const Home = (
   };
 
   const [params, setParams] = useState(getInitialParams(props.query));
-  const [order, setOrder] = useState({ products: [] })
+  const [order, setOrder] = useState({ products: [] });
 
   useEffect(() => {
-    const products = JSON.parse(localStorage.getItem("products") as string) || [];
-    setOrder({ products })
-  }, [])
+    const products =
+      JSON.parse(localStorage.getItem("products") as string) || [];
+    setOrder({ products });
+  }, []);
 
   useEffect(() => {
     // storage in localStorage
-    localStorage.setItem("products", JSON.stringify(order.products))
-  }, [order])
+    localStorage.setItem("products", JSON.stringify(order.products));
+  }, [order]);
 
   if (props.notFound) {
     return (
@@ -55,7 +56,7 @@ const Home = (
         rarities: props.rarities,
         sets: props.sets,
         order,
-        setOrder
+        setOrder,
       }}
     >
       <Head>
@@ -74,7 +75,6 @@ const Home = (
     </MarketplaceContext.Provider>
   );
 };
-
 
 export default Home;
 
