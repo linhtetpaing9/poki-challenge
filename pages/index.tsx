@@ -40,7 +40,7 @@ const Home = (
   if (props.notFound) {
     return (
       <div className="error wrap">
-        <h1>Couldn't find any cards matching your search criteria!</h1>
+        <h1>Could not find any cards matching your search criteria!</h1>
       </div>
     );
   }
