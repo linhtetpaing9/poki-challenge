@@ -18,7 +18,7 @@ const Cart = () => {
     // extends payment process, need create payment
     setVisible(false);
     setCheckoutVisible(true);
-  }
+  };
 
   const totalCards = order?.products?.length || 0;
   const totalPrice = order?.products.reduce(
@@ -28,20 +28,25 @@ const Cart = () => {
         product?.cardmarket?.prices?.trendPrice ||
         10000;
       const quantity = product?.quantity || 0;
-      return (acc + price * quantity);
+      return acc + price * quantity;
     },
     0
   );
 
   return (
     <section id="cart">
-      <Button
-        className="cart"
-        icon={<ShoppingCartOutlined />}
-        onClick={() => setVisible(true)}
-      >
-        View cart
-      </Button>
+      <div className="cart">
+        <p style={{
+          
+        }}>{totalCards}</p>
+        <Button
+          className="cart__btn"
+          icon={<ShoppingCartOutlined />}
+          onClick={() => setVisible(true)}
+        >
+          View cart
+        </Button>
+      </div>
       <Modal
         title={false}
         visible={visible}
@@ -77,7 +82,12 @@ const Cart = () => {
             <h3>Total price</h3>
             <p className="lg">{totalPrice.toFixed(2)}</p>
           </div>
-          <Button onClick={handleCheckout}>Pay now</Button>
+          <Button
+            disabled={order.products.length == 0}
+            onClick={handleCheckout}
+          >
+            Pay now
+          </Button>
         </div>
       </Modal>
       <Modal
@@ -90,7 +100,7 @@ const Cart = () => {
         closeIcon={<img src="/img/Close.png" />}
         footer={false}
       >
-        <img className="payment__success" src="/img/message.png"/>
+        <img className="payment__success" src="/img/message.png" />
       </Modal>
     </section>
   );

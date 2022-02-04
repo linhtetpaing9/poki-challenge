@@ -126,7 +126,7 @@ export const OrderCard = ({ card }: { card: OrderProduct }) => {
 
 // Customize input number, fix need to set proper type
 const InputNumber = ({ min, max, onChange = () => {} }: any) => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(min);
 
   useEffect(() => {
     onChange(value);
@@ -151,7 +151,7 @@ const InputNumber = ({ min, max, onChange = () => {} }: any) => {
       ) : (
         <Button className="not__up" icon={<UpOutlined />} onClick={handleUp} />
       )}
-      {value !== min ? (
+      {value !== min  ? (
         <Button className="down" icon={<DownOutlined />} onClick={handleDown} />
       ) : (
         <Button

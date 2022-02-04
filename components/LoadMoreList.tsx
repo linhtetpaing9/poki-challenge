@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, List } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import { PokemonTCG } from "pokemon-tcg-sdk-typescript";
 import Router from "next/router";
@@ -51,12 +52,17 @@ const LoadMoreList = () => {
         style={{
           textAlign: "center",
           marginTop: 12,
-          height: 32,
+          height: 42,
           lineHeight: "32px",
+          marginBottom: 150,
         }}
       >
-        <Button className="load__more" onClick={onLoadMore}>
-          Load More
+        <Button
+          icon={<SearchOutlined />}
+          className="load__more"
+          onClick={onLoadMore}
+        >
+          show more
         </Button>
       </div>
     ) : null;
