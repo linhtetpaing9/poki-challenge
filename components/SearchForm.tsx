@@ -9,18 +9,18 @@ const SearchForm = () => {
   const { types, rarities, sets, params, setParams } =
     useContext<Marketplace>(MarketplaceContext);
 
-  const typeOptions = types.map((type: PokemonTCG.Type) => ({
-    label: type,
-    value: type?.replaceAll(" ", "*"),
-  }));
-  const rarityOptions = rarities.map((rarity: PokemonTCG.Rarity) => ({
-    label: rarity,
-    value: rarity?.replaceAll(" ", "*"),
-  }));
-  const setOptions = sets.map((set: PokemonTCG.Set) => ({
-    label: set.name,
-    value: set.id?.replaceAll(" ", "*"),
-  }));
+  // const typeOptions = types.map((type: PokemonTCG.Type) => ({
+  //   label: type,
+  //   value: type?.replaceAll(" ", "*"),
+  // }));
+  // const rarityOptions = rarities.map((rarity: PokemonTCG.Rarity) => ({
+  //   label: rarity,
+  //   value: rarity?.replaceAll(" ", "*"),
+  // }));
+  // const setOptions = sets.map((set: PokemonTCG.Set) => ({
+  //   label: set.name,
+  //   value: set.id?.replaceAll(" ", "*"),
+  // }));
 
   const handleParams = (param: any) => (value: any) => {
     if (param == "name") {
@@ -48,7 +48,7 @@ const SearchForm = () => {
             onChange={handleParams("types")}
             size="large"
             defaultValue={params.types}
-            options={typeOptions}
+            options={[]}
             allowClear
           ></Select>
         </Col>
@@ -59,7 +59,7 @@ const SearchForm = () => {
             onChange={handleParams("rarity")}
             size="large"
             defaultValue={params.rarity}
-            options={rarityOptions}
+            options={[]}
             allowClear
           ></Select>
         </Col>
@@ -70,7 +70,7 @@ const SearchForm = () => {
             onChange={handleParams("set.id")}
             size="large"
             defaultValue={params["set.id"]}
-            options={setOptions}
+            options={[]}
             allowClear
           ></Select>
         </Col>
