@@ -9,24 +9,18 @@ const SearchForm = () => {
   const { types, rarities, sets, params, setParams } =
     useContext<Marketplace>(MarketplaceContext);
 
-    console.log({types})
-    console.log({rarities})
-    console.log({sets})
   const typeOptions = types.map((type: PokemonTCG.Type) => ({
     label: type,
-    value: type,
+    value: type.replaceAll(" ", "*"),
   }));
   const rarityOptions = rarities.map((rarity: PokemonTCG.Rarity) => ({
     label: rarity,
-    value: rarity,
+    value: rarity.replaceAll(" ", "*"),
   }));
   const setOptions = sets.map((set: PokemonTCG.Set) => ({
     label: set.name,
-    value: set.id,
+    value: set.id.replaceAll(" ", "*"),
   }));
-      console.log({ typeOptions });
-      console.log({ rarityOptions });
-      console.log({ setOptions });
 
   const handleParams = (param: any) => (value: any) => {
     if (param == "name") {

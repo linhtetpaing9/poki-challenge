@@ -19,7 +19,7 @@ const Home = (
   const getInitialParams = (query: any) => {
     const splitTypes = query?.q?.split(" ") || [""];
     const rawParams = splitTypes.map((type: string) =>
-      type?.split(":")
+      type?.replaceAll("*", " ").split(":")
     );
     return Object.fromEntries(rawParams);
   };
@@ -87,12 +87,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     pageSize: parseInt(size as string) || 12,
   };
   try {
-    const cards: PokemonCard[] =
-      (await PokemonTCG.findCardsByQueries(params)) || [];
+    const cards: PokemonCard[] = [];
 
-    const types: PokemonTCG.Type[] = await PokemonTCG.getTypes();
-    const rarities: PokemonTCG.Rarity[] = await PokemonTCG.getRarities();
-    const sets: PokemonTCG.Set[] = await PokemonTCG.getAllSets();
+    const types: PokemonTCG.Type[] = [];
+    const rarities: PokemonTCG.Rarity[] = [];
+    const sets: PokemonTCG.Set[] = [];
 
     return { props: { query, cards, types, rarities, sets } };
   } catch (error) {
