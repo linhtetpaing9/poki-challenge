@@ -95,11 +95,11 @@ export const OrderCard = ({ card }: { card: OrderProduct }) => {
 
   return (
     <div className="order__card">
-      <Row gutter={15}>
-        <Col span={6}>
+      <Row>
+        <Col xs={8} sm={6}>
           <img src={card?.images?.small} loading="lazy" />
         </Col>
-        <Col span={12}>
+        <Col xs={10} sm={12}>
           <div className="order__content">
             <h2>{card?.name}</h2>
             <p>{priceDisplay}</p>
@@ -108,7 +108,7 @@ export const OrderCard = ({ card }: { card: OrderProduct }) => {
             </h5>
           </div>
         </Col>
-        <Col span={6}>
+        <Col xs={6} sm={6}>
           <div className="price__item">
             <InputNumber
               min={1}

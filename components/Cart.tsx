@@ -50,7 +50,7 @@ const Cart = () => {
       <Modal
         title={false}
         visible={visible}
-        width={420}
+        // width={420}
         centered
         wrapClassName={"cart__modal"}
         onCancel={() => setVisible(false)}

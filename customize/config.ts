@@ -3,5 +3,4 @@ export default {
   description: "",
   phone: "",
   email: "",
-  domain: "",
 };
