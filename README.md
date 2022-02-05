@@ -18,4 +18,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [PokemonTCG Types Repo](https://github.com/PokemonTCG/pokemon-tcg-sdk-typescript)
 
 ## Demo
-https://poki-challenge-netlptv0v-linhtetpaing9.vercel.app/
+https://poki-challenge.vercel.app/
